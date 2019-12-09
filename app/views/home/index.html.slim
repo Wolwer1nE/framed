@@ -1,0 +1,21 @@
+script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js"
+.wrapper
+  .row
+    .column
+      #editor
+    .column.scene-wrapper
+javascript:
+  let editor = ace.edit("editor");
+  let scene = document.querySelector('.column.scene-wrapper');
+  editor.setTheme("ace/theme/monokai");
+  editor.session.setMode("ace/mode/javascript");
+  let xmlHttp = new XMLHttpRequest();
+  xmlHttp.onreadystatechange = function () {
+      if (xmlHttp.readyState === 4 && xmlHttp.status === 200)
+          editor.setValue(xmlHttp.responseText);
+  };
+  xmlHttp.open("GET", '/home/default', true);
+  xmlHttp.send(null);
+  editor.session.on('change', function (delta) {
+    scene.innerHTML = editor.getValue();
+  });
